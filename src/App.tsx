@@ -7,6 +7,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import OrderDetails from "./pages/OrderDetails";
 
 // 🔒 Componente para proteger rutas privadas
 import type { ReactElement } from "react";
@@ -66,6 +67,14 @@ export default function App() {
             element={
               <PrivateRoute>
                 <Cart />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/order/:orderId"
+            element={
+              <PrivateRoute>
+                <OrderDetails />
               </PrivateRoute>
             }
           />

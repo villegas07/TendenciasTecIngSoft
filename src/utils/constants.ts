@@ -3,12 +3,19 @@
  */
 
 // URLs de la API
+export const API_URL = 'http://localhost:3000/api';
+
 export const API_URLS = {
-  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api',
+  BASE_URL: API_URL,
   PRODUCTS: '/products',
   CART: '/cart',
   AUTH: '/auth',
   USERS: '/users',
+  ORDERS: '/orders',
+  REVIEWS: '/reviews',
+  NOTIFICATIONS: '/notifications',
+  PAYMENTS: '/payments',
+  INVENTORY: '/inventory',
 } as const;
 
 // Claves de localStorage
