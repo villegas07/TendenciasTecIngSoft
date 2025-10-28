@@ -3,29 +3,31 @@ import { Link } from 'react-router-dom';
 import type { Product } from '../../types';
 import { Card, Button } from '../common';
 import { formatCurrency } from '../../utils';
-import { ShoppingCart, Star } from 'lucide-react';
-import { useCart } from '../../hooks';
+import { ShoppingCart, Star, Check } from 'lucide-react';
+import { useCartContext } from '../../context';
+import { showAddToCartSuccess } from '../../utils/alerts';
 
 interface ProductCardProps {
   product: Product;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const { addToCart } = useCart();
-  const [isAdding, setIsAdding] = React.useState(false);
+  const { addToCart, isLoading } = useCartContext();
+  const [isAdded, setIsAdded] = React.useState(false);
 
   const handleAddToCart = async () => {
-    setIsAdding(true);
     try {
       await addToCart({
         product,
         quantity: 1,
       });
-      // Aquí se puede mostrar un toast de éxito
+      // Mostrar notificación
+      showAddToCartSuccess(product.name, 1);
+      // Mostrar feedback visual
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 2000);
     } catch (err) {
       console.error('Error adding to cart:', err);
-    } finally {
-      setIsAdding(false);
     }
   };
 
@@ -87,11 +89,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </Link>
           <Button
             onClick={handleAddToCart}
-            disabled={product.stock === 0 || isAdding}
-            isLoading={isAdding}
-            className="flex-1"
+            disabled={product.stock === 0 || isLoading}
+            isLoading={isLoading && !isAdded}
+            className={`flex-1 ${isAdded ? 'bg-green-500 hover:bg-green-600 text-white' : ''}`}
           >
-            <ShoppingCart size={18} />
+            {isAdded ? (
+              <>
+                <Check size={18} />
+              </>
+            ) : (
+              <ShoppingCart size={18} />
+            )}
           </Button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuthContext } from "../context";
+import { showLoginSuccess, showErrorAlert, showValidationErrorAlert } from "../utils/alerts";
 
 export default function Login() {
   const { login } = useAuthContext(); // Función del contexto para login
@@ -13,7 +14,7 @@ export default function Login() {
     e.preventDefault();
 
     if (!email || !password) {
-      setError("Por favor completa todos los campos.");
+      showValidationErrorAlert(["El correo es requerido", "La contraseña es requerida"]);
       return;
     }
 
@@ -21,9 +22,12 @@ export default function Login() {
       // ✅ Pasar credenciales al login
       await login({ email, password });
       setError("");
+      showLoginSuccess(email.split('@')[0]);
       navigate("/", { replace: true }); // Redirige a Home
     } catch (err) {
-      setError("Correo o contraseña incorrectos.");
+      const errorMessage = "Correo o contraseña incorrectos.";
+      setError(errorMessage);
+      showErrorAlert("Error en el Login", errorMessage);
     }
   };
 

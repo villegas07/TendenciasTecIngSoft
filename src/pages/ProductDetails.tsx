@@ -4,6 +4,7 @@ import { products } from "../data/products";
 import { useCart } from "../hooks";
 import { ArrowLeft, ShoppingCart, Check } from "lucide-react";
 import { formatCurrency } from "../utils";
+import { showAddToCartSuccess, showErrorAlert } from "../utils/alerts";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -32,12 +33,17 @@ export default function ProductDetails() {
   }
 
   const handleAddToCart = () => {
-    addToCart({
-      product,
-      quantity,
-    });
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2000);
+    try {
+      addToCart({
+        product,
+        quantity,
+      });
+      showAddToCartSuccess(product.name, quantity);
+      setIsAdded(true);
+      setTimeout(() => setIsAdded(false), 2000);
+    } catch (err) {
+      showErrorAlert('Error', 'No se pudo agregar el producto al carrito');
+    }
   };
 
   const handleQuantityChange = (value: number) => {

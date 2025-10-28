@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../context';
 import { useCartContext } from '../../context';
 import { Button } from '../common';
+import { showLogoutSuccess, showConfirmAlert } from '../../utils/alerts';
 
 export const Header: React.FC = () => {
   const { user, logout, isAuthenticated } = useAuthContext();
@@ -25,11 +26,20 @@ export const Header: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    logout();
-    setShowDropdown(false);
-    setShowMenu(false);
-    navigate('/login');
+  const handleLogout = async () => {
+    const confirmed = await showConfirmAlert(
+      '¿Cerrar Sesión?',
+      '¿Estás seguro de que deseas cerrar tu sesión?',
+      'Sí, cerrar sesión'
+    );
+
+    if (confirmed) {
+      logout();
+      setShowDropdown(false);
+      setShowMenu(false);
+      showLogoutSuccess();
+      navigate('/login');
+    }
   };
 
   return (
