@@ -7,6 +7,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import CatalogManagement from "./pages/CatalogManagement";
 
 // 🔒 Componente para proteger rutas privadas
 import type { ReactElement } from "react";
@@ -14,6 +15,21 @@ import type { ReactElement } from "react";
 function PrivateRoute({ children }: { children: ReactElement }) {
   const { isAuthenticated } = useAuthContext();
   return isAuthenticated ? children : <Navigate to="/login" replace />;
+}
+
+// 🏪 Componente para proteger rutas solo de vendedores
+function VendorRoute({ children }: { children: ReactElement }) {
+  const { isAuthenticated, user } = useAuthContext();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  if (user?.role !== 'vendedor') {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
 }
 
 export default function App() {
@@ -67,6 +83,14 @@ export default function App() {
               <PrivateRoute>
                 <Cart />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="/catalog-management"
+            element={
+              <VendorRoute>
+                <CatalogManagement />
+              </VendorRoute>
             }
           />
 

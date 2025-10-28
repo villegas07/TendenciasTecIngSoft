@@ -25,6 +25,10 @@ export const authService = {
     // En producción, verificar contraseña con el backend
     const mockToken = 'mock_jwt_token_' + Date.now();
 
+    // 🔍 Asegurar que el usuario tenga rol
+    const userRole = user.role || 'comprador'; // Rol por defecto
+    console.log(`✅ Login exitoso: ${user.email} - Rol: ${userRole}`);
+
     return {
       user: {
         id: user.id,
@@ -33,7 +37,7 @@ export const authService = {
         phone: user.phone,
         city: user.city,
         country: user.country,
-        role: user.role,
+        role: userRole,
       },
       token: mockToken,
     };
@@ -52,18 +56,23 @@ export const authService = {
       throw new Error('Este correo ya está registrado');
     }
 
+    // 🔍 Asegurar que el rol esté definido
+    const userRole = data.role || 'comprador';
+
     const newUser = {
       id: String(users.length + 1),
       name: data.name,
       email: data.email,
       password: data.password,
-      role: 'customer' as const,
+      role: userRole as 'vendedor' | 'comprador',
     };
 
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
 
     const mockToken = 'mock_jwt_token_' + Date.now();
+
+    console.log(`✅ Registro exitoso: ${newUser.email} - Rol: ${userRole}`);
 
     return {
       user: {

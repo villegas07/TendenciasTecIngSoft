@@ -7,7 +7,9 @@ export default function Header() {
   const { user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
 
-  if (!user) return null; // 👈 No mostrar el header si no hay usuario logueado
+  if (!user) return null;
+
+  const isVendedor = user.role === 'vendedor';
 
   return (
     <header className="flex items-center justify-between px-6 py-4 bg-indigo-600 text-white shadow-md">
@@ -17,11 +19,19 @@ export default function Header() {
 
       <nav className="flex items-center gap-6">
         <Link to="/productos" className="hover:underline">
-          Productos
+          🛍️ Productos
         </Link>
+        
         <Link to="/carrito" className="flex items-center gap-1 hover:underline">
           <ShoppingCart size={20} /> Carrito
         </Link>
+
+        {/* 📦 Link de gestión SOLO para vendedores */}
+        {isVendedor && (
+          <Link to="/catalog-management" className="flex items-center gap-1 hover:underline">
+            Gestión
+          </Link>
+        )}
 
         {/* 👤 Menú de usuario */}
         <div className="relative">
@@ -30,13 +40,22 @@ export default function Header() {
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden">
-              <div className="px-4 py-2 border-b">👋 Hola, {user.name}</div>
+            <div className="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg overflow-hidden z-50">
+              <div className="px-4 py-3 border-b">
+                <div className="font-semibold">👋 {user.name}</div>
+                <div className="text-xs text-gray-500">{user.email}</div>
+                <div className="text-xs text-gray-400 mt-1">
+                  {isVendedor ? '🏪 Vendedor' : '👤 Comprador'}
+                </div>
+              </div>
               <button
-                onClick={logout}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                onClick={() => {
+                  logout();
+                  setShowMenu(false);
+                }}
+                className="w-full text-left px-4 py-2 hover:bg-gray-100 transition"
               >
-                Cerrar sesión
+                🚪 Cerrar sesión
               </button>
             </div>
           )}

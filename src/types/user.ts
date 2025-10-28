@@ -6,7 +6,7 @@ export interface User {
   address?: string;
   city?: string;
   country?: string;
-  role: 'customer' | 'admin';
+  role: 'vendedor' | 'comprador';
 }
 
 export interface AuthCredentials {
@@ -17,6 +17,7 @@ export interface AuthCredentials {
 export interface RegisterData extends AuthCredentials {
   name: string;
   confirmPassword: string;
+  role: 'vendedor' | 'comprador';
 }
 
 export interface AuthResponse {

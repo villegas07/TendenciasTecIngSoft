@@ -72,3 +72,8 @@ export const useAuthContext = () => {
   }
   return context;
 };
+
+/**
+ * Alias para useAuthContext
+ */
+export const useAuth = () => useAuthContext();

@@ -61,6 +61,9 @@ export const Header: React.FC = () => {
               <Link to="/products" className="text-gray-700 hover:text-indigo-600 transition font-medium">
                 Productos
               </Link>
+              <Link to="/catalog-management" className="text-gray-700 hover:text-indigo-600 transition font-medium text-sm px-3 py-1 border border-indigo-200 rounded-lg hover:bg-indigo-50">
+                📦 Gestión
+              </Link>
               <Link to="/cart" className="flex items-center gap-2 text-gray-700 hover:text-indigo-600 transition font-medium">
                 <ShoppingCart size={20} />
                 <span className="bg-indigo-600 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold">
